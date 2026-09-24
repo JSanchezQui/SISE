@@ -1,4 +1,4 @@
-# Registro de Pruebas Prácticas - Nova Servicios (EA1)
+# Registro de Pruebas Prácticas - TechnoWorld (EA1)
 
 * **Fecha de ejecución:** 23 de septiembre de 2026
 * **Navegador y Versión:** Google Chrome v128.0 (64-bit)
