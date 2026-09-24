@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal TI - TechnoWorld</title>
+    <meta name="description" content="Plataforma de aprendizaje y recursos para profesionales de Tecnologías de la Información.">
+    
+    <!-- Tailwind CSS para maquetación rápida y responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        /* Variables CSS para facilitar la transición de temas y alto contraste */
+        :root {
+            --color-bg: #f8fafc;
+            --color-surface: #ffffff;
+            --color-text-main: #0f172a;
+            --color-text-muted: #475569;
+            --color-primary: #2563eb;
+            --color-primary-hover: #1d4ed8;
+            --color-border: #e2e8f0;
+            --color-error: #dc2626;
+            --color-success: #16a34a;
+            --focus-ring: #3b82f6;
+        }
+
+        /* Tema Oscuro */
+        [data-theme="dark"] {
+            --color-bg: #0f172a;
+            --color-surface: #1e293b;
+            --color-text-main: #f8fafc;
+            --color-text-muted: #94a3b8;
+            --color-primary: #3b82f6;
+            --color-primary-hover: #60a5fa;
+            --color-border: #334155;
+            --color-error: #ef4444;
+            --color-success: #22c55e;
+            --focus-ring: #60a5fa;
+        }
+
+        /* Tema de Alto Contraste (Accesibilidad) */
+        [data-theme="high-contrast"] {
+            --color-bg: #000000;
+            --color-surface: #000000;
+            --color-text-main: #ffffff;
+            --color-text-muted: #ffff00;
+            --color-primary: #ffff00;
+            --color-primary-hover: #ffffff;
+            --color-border: #ffffff;
+            --color-error: #ff0000;
+            --color-success: #00ff00;
+            --focus-ring: #ffff00;
+        }
+
+        /* Aplicación global de variables */
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .surface { background-color: var(--color-surface); border-color: var(--color-border); }
+        .text-muted { color: var(--color-text-muted); }
+        .btn-primary { 
+            background-color: var(--color-primary); 
+            color: var(--color-bg); /* Contraste invertido */
+        }
+        .btn-primary:hover { background-color: var(--color-primary-hover); }
+        
+        [data-theme="high-contrast"] .btn-primary {
+            color: #000;
+        }
+
+        /* Mejoras estrictas de accesibilidad: Indicadores de foco visibles */
+        *:focus-visible {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 2px;
+        }
+
+        /* Saltar al contenido principal (Oculto hasta que recibe foco) */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--color-primary);
+            color: var(--color-bg);
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.2s ease;
+        }
+        .skip-link:focus { top: 0; }
+
+        /* Estilos de error en formularios */
+        .input-error { border-color: var(--color-error) !important; }
+        .error-msg { color: var(--color-error); font-size: 0.875rem; margin-top: 0.25rem; }
+        .success-msg { color: var(--color-success); font-weight: bold; }
+        
+        input, select { 
+            background-color: var(--color-bg); 
+            color: var(--color-text-main);
+            border: 1px solid var(--color-border);
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <!-- Enlace de accesibilidad para saltar navegación -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <header role="banner" class="surface border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <!-- Icono SVG Semántico -->
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" style="color: var(--color-primary)" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <h1 class="text-xl font-bold tracking-tight">TechnoWorld</h1>
+            </div>
+            
+            <nav role="navigation" aria-label="Navegación principal" class="hidden md:flex gap-6">
+                <a href="#hero" class="font-medium hover:underline focus:underline" style="color: var(--color-primary)">Inicio</a>
+                <a href="#features" class="font-medium hover:underline focus:underline">Recursos</a>
+                <a href="#quiz-section" class="font-medium hover:underline focus:underline">Evaluación</a>
+            </nav>
+
+            <!-- Controles de Accesibilidad -->
+            <div class="flex items-center gap-3">
+                <button id="theme-toggle" class="p-2 rounded-full surface border flex items-center justify-center transition-colors" aria-label="Cambiar tema visual" aria-pressed="false" title="Alternar Alto Contraste">
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="flex-grow">
+        
+        <!-- Hero Section -->
+        <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center" aria-labelledby="hero-title">
+            <h2 id="hero-title" class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight">
+                Potencia tu perfil en <span style="color: var(--color-primary)">Desarrollo TI</span>
+            </h2>
+            <p class="text-xl mb-10 max-w-2xl mx-auto text-muted">
+                Domina arquitecturas web, estándares de accesibilidad, despliegues escalables y estructuras de datos con nuestras rutas de aprendizaje.
+            </p>
+            <a href="#quiz-section" class="inline-flex justify-center items-center px-8 py-3 rounded-lg text-lg font-medium btn-primary transition-all">
+                Poner a prueba mis conocimientos
+            </a>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="surface border-t border-b py-16" aria-labelledby="features-title">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 id="features-title" class="text-3xl font-bold text-center mb-12">Áreas de Especialización</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <article class="p-6 border rounded-xl surface transition-transform hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: var(--color-primary); color: var(--color-bg)">
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Frontend Moderno</h3>
+                        <p class="text-muted">Interfaces fluidas, semánticas y completamente accesibles (WCAG 2.1).</p>
+                    </article>
+                    <!-- Feature 2 -->
+                    <article class="p-6 border rounded-xl surface transition-transform hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: var(--color-primary); color: var(--color-bg)">
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Backend y Bases de Datos</h3>
+                        <p class="text-muted">Diseño de APIs seguras y modelos relacionales eficientes.</p>
+                    </article>
+                    <!-- Feature 3 -->
+                    <article class="p-6 border rounded-xl surface transition-transform hover:-translate-y-1">
+                        <div class="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style="background-color: var(--color-primary); color: var(--color-bg)">
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Arquitectura de Servidores</h3>
+                        <p class="text-muted">Configuración de entornos, CI/CD y optimización de despliegues.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz-section" class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20" aria-labelledby="quiz-heading">
+            <div class="surface border rounded-2xl p-6 md:p-10 shadow-sm">
+                <h2 id="quiz-heading" class="text-2xl font-bold mb-2">Autoevaluación Técnica</h2>
+                <p class="text-muted mb-8">Demuestra tus conocimientos básicos en estándares web y redes. Responde las siguientes preguntas.</p>
+
+                <form id="tech-quiz" novalidate>
+                    <!-- Pregunta 1: Opción múltiple con fieldset (Accesibilidad) -->
+                    <fieldset class="mb-8" aria-labelledby="q1-legend">
+                        <legend id="q1-legend" class="text-lg font-medium mb-4">1. En el contexto de Accesibilidad Web (WCAG), ¿Para qué sirve el atributo <code style="color: var(--color-primary)">aria-live</code>?</legend>
+                        <div class="flex flex-col gap-3">
+                            <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-opacity-50 transition-colors" style="background-color: var(--color-bg)">
+                                <input type="radio" name="q1" value="a" class="mt-1 w-4 h-4" required>
+                                <span>Para crear animaciones en vivo en elementos SVG.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-opacity-50 transition-colors" style="background-color: var(--color-bg)">
+                                <input type="radio" name="q1" value="b" class="mt-1 w-4 h-4">
+                                <span>Para anunciar actualizaciones dinámicas de contenido a los lectores de pantalla.</span>
+                            </label>
+                            <label class="flex items-start gap-3 p-3 border rounded-lg cursor-pointer hover:bg-opacity-50 transition-colors" style="background-color: var(--color-bg)">
+                                <input type="radio" name="q1" value="c" class="mt-1 w-4 h-4">
+                                <span>Para forzar la recarga de la página en tiempo real.</span>
+                            </label>
+                        </div>
+                        <div id="q1-error" class="error-msg hidden" aria-live="polite">Por favor, selecciona una opción.</div>
+                    </fieldset>
+
+                    <!-- Pregunta 2: Entrada de texto con etiquetas asociadas -->
+                    <div class="mb-8">
+                        <label for="q2-input" class="block text-lg font-medium mb-4">2. ¿Cuál es el puerto de red predeterminado utilizado para el protocolo seguro <code style="color: var(--color-primary)">HTTPS</code>?</label>
+                        <input type="text" id="q2-input" name="q2" class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Ej: 80" aria-describedby="q2-error" required>
+                        <div id="q2-error" class="error-msg hidden" aria-live="polite">Este campo es obligatorio. Ingresa un número.</div>
+                    </div>
+
+                    <!-- Botón de Envío -->
+                    <button type="submit" class="w-full py-4 rounded-lg font-bold text-lg btn-primary transition-colors focus:ring-4 focus:ring-offset-2">
+                        Validar Respuestas
+                    </button>
+
+                    <!-- Región para feedback global a lectores de pantalla -->
+                    <div id="quiz-feedback" class="mt-6 p-4 rounded-lg hidden text-center text-lg border" aria-live="assertive" role="alert">
+                        <!-- El contenido se inyecta por JS -->
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="surface border-t py-8 text-center" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-muted">© 2026 TechnoWorld - Portal TI. Todos los derechos reservados.</p>
+            <p class="text-sm text-muted mt-2">Diseñado con estándares de accesibilidad WCAG 2.1 AA</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            /* =========================================
+               1. LÓGICA DE TEMAS Y ACCESIBILIDAD (A11Y)
+               ========================================= */
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            
+            // Ciclo de temas: light -> dark -> high-contrast -> light
+            const themes = ['light', 'dark', 'high-contrast'];
+            let currentThemeIndex = 0;
+
+            themeToggleBtn.addEventListener('click', () => {
+                currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+                const newTheme = themes[currentThemeIndex];
+                
+                htmlElement.setAttribute('data-theme', newTheme);
+                
+                // Actualizar estado ARIA
+                const isHighContrast = newTheme === 'high-contrast';
+                themeToggleBtn.setAttribute('aria-pressed', isHighContrast.toString());
+                
+                // Cambiar ícono visualmente (Opcional, pero da buen UX)
+                if (newTheme === 'dark') {
+                    themeToggleBtn.innerHTML = `<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>`;
+                } else if (newTheme === 'high-contrast') {
+                    themeToggleBtn.innerHTML = `<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
+                } else {
+                    themeToggleBtn.innerHTML = `<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>`;
+                }
+            });
+
+            /* =========================================
+               2. VALIDACIÓN DE CUESTIONARIO
+               ========================================= */
+            const form = document.getElementById('tech-quiz');
+            const feedbackBox = document.getElementById('quiz-feedback');
+            
+            // Respuestas correctas
+            const CORRECT_ANSWERS = {
+                q1: 'b',
+                q2: ['443']
+            };
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let isValid = true;
+                let score = 0;
+
+                // Resetear estados visuales y ARIA
+                resetErrors();
+
+                // Validar Q1 (Radio)
+                const q1Value = form.querySelector('input[name="q1"]:checked')?.value;
+                if (!q1Value) {
+                    showError('q1-error', 'Por favor, selecciona una opción para la primera pregunta.');
+                    isValid = false;
+                } else if (q1Value === CORRECT_ANSWERS.q1) {
+                    score++;
+                }
+
+                // Validar Q2 (Text)
+                const q2Input = document.getElementById('q2-input');
+                const q2Value = q2Input.value.trim();
+                if (q2Value === '') {
+                    showError('q2-error', 'El campo del puerto es obligatorio.');
+                    q2Input.setAttribute('aria-invalid', 'true');
+                    q2Input.classList.add('input-error');
+                    isValid = false;
+                } else if (isNaN(q2Value)) {
+                    showError('q2-error', 'Debes ingresar un valor numérico.');
+                    q2Input.setAttribute('aria-invalid', 'true');
+                    q2Input.classList.add('input-error');
+                    isValid = false;
+                } else if (CORRECT_ANSWERS.q2.includes(q2Value)) {
+                    score++;
+                }
+
+                // Mostrar resultados si pasó validación básica (no vacíos)
+                if (isValid) {
+                    showResults(score, 2);
+                } else {
+                    // Ocultar caja de resultados si hay errores de formato
+                    feedbackBox.classList.add('hidden');
+                    // Mover foco al primer error para accesibilidad
+                    const firstErrorInput = form.querySelector('.input-error, input[type="radio"]:not(:checked)');
+                    if (firstErrorInput) firstErrorInput.focus();
+                }
+            });
+
+            function showError(elementId, message) {
+                const errorEl = document.getElementById(elementId);
+                errorEl.textContent = message;
+                errorEl.classList.remove('hidden');
+            }
+
+            function resetErrors() {
+                document.querySelectorAll('.error-msg').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('input').forEach(el => {
+                    el.classList.remove('input-error');
+                    el.removeAttribute('aria-invalid');
+                });
+            }
+
+            function showResults(score, total) {
+                feedbackBox.classList.remove('hidden');
+                
+                if (score === total) {
+                    feedbackBox.style.borderColor = 'var(--color-success)';
+                    feedbackBox.style.backgroundColor = 'rgba(22, 163, 74, 0.1)';
+                    feedbackBox.innerHTML = `<span class="success-msg">¡Excelente trabajo! Has obtenido ${score} de ${total} correctas.</span> Dominas los fundamentos.`;
+                } else {
+                    feedbackBox.style.borderColor = 'var(--color-primary)';
+                    feedbackBox.style.backgroundColor = 'rgba(37, 99, 235, 0.1)';
+                    feedbackBox.innerHTML = `Has obtenido <strong style="color: var(--color-primary)">${score} de ${total}</strong> correctas. ¡Sigue repasando los conceptos de redes y accesibilidad!`;
+                }
+                
+                // Mover foco al feedback para que el lector de pantalla lo anuncie de inmediato
+                feedbackBox.setAttribute('tabindex', '-1');
+                feedbackBox.focus();
+            }
+        });
+    </script>
+</body>
+</html>
